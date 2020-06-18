@@ -6,6 +6,8 @@ const customerService = new CustomerService();
 class CustomerCreateUpdate extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+        }
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
@@ -14,12 +16,14 @@ class CustomerCreateUpdate extends Component {
         if (params && params.pk ) {
             {
                 customerService.getCustomer(params.pk).then((c) => {
-                    this.refs.firstName.value  =  c.first_name;
-                    this.refs.lastName.value  =  c.last_name;
-                    this.refs.email.value  =  c.email;
-                    this.refs.phone.value  =  c.phone;
-                    this.refs.address.value  =  c.address;
-                    this.refs.description.value  =  c.description;
+                    this.setState({
+                        first_name:  c.first_name,
+                        last_name:  c.last_name,
+                        email:  c.email,
+                        phone:  c.phone,
+                        address:  c.address,
+                        description:  c.description,
+                    })
                 })
             }
         }
@@ -27,14 +31,7 @@ class CustomerCreateUpdate extends Component {
 
     handleCreate = () => {
         customerService.createCustomer(
-            {
-                "first_name": this.refs.firstName.value,
-                "last_name":  this.refs.lastName.value,
-                "email":  this.refs.email.value,
-                "phone":  this.refs.phone.value,
-                "address":  this.refs.address.value,
-                "description":  this.refs.description.value
-            }
+            this.state
         ).then((result) => {
             alert("Customer created!");
         }).catch(() => {
@@ -46,12 +43,12 @@ class CustomerCreateUpdate extends Component {
         customerService.updateCustomer(
             {
                 "pk":  pk,
-                "first_name":  this.refs.firstName.value,
-                "last_name":  this.refs.lastName.value,
-                "email":  this.refs.email.value,
-                "phone":  this.refs.phone.value,
-                "address":  this.refs.address.value,
-                "description":  this.refs.description.value
+                "first_name":  this.state.first_name,
+                "last_name":  this.state.last_name,
+                "email":  this.state.email,
+                "phone":  this.state.phone,
+                "address":  this.state.address,
+                "description":  this.state.description
             }
         ).then((result) => {
             alert("Customer updated!");
@@ -70,29 +67,75 @@ class CustomerCreateUpdate extends Component {
         event.preventDefault();
     }
 
+    handleChange = (e) => {
+        this.setState({
+            [e.target.name]: e.target.value
+        })
+    }
+
     render() {
         return(
             <form onSubmit={ this.handleSubmit }>
-                <div className='form-group'>
-                    <label>First Name</label>
-                    <input className="form-control" type="text" ref="firstName" />
+                <div className="card">
+                    <div className="card-body">
+                        <h4 className="card-title">Customers</h4>
+                    <div className='form-group'>
+                        <label>First Name</label>
+                        <input
+                            className="form-control"
+                            type="text"
+                            name="first_name"
+                            onChange={ this.handleChange }
+                            value={ this.state.first_name }
+                        />
 
-                    <label>Last Name</label>
-                    <input className="form-control" type="text" ref="lastName" />
+                        <label>Last Name</label>
+                        <input
+                            className="form-control"
+                            type="text"
+                            name="last_name"
+                            onChange={ this.handleChange }
+                            value={ this.state.last_name }
+                        />
 
-                    <label>Email</label>
-                    <input className="form-control" type="text" ref="email" />
+                        <label>Email</label>
+                        <input
+                            className="form-control"
+                            type="text"
+                            name="email"
+                            onChange={ this.handleChange }
+                            value={ this.state.email }
+                        />
 
-                    <label>Phone</label>
-                    <input className="form-control" type="text" ref="phone" />
+                        <label>Phone</label>
+                        <input
+                            className="form-control"
+                            type="text"
+                            name="phone"
+                            onChange={ this.handleChange }
+                            value={ this.state.phone }
+                        />
 
-                    <label>Address</label>
-                    <input className="form-control" type="text" ref="address" />
+                        <label>Address</label>
+                        <input
+                            className="form-control"
+                            type="text"
+                            name="address"
+                            onChange={ this.handleChange }
+                            value={ this.state.address }
+                        />
 
-                    <label>Description</label>
-                    <textarea className="form-control" ref="description" />
-
-                    <input className="btn btn-primary" type="submit" value="Submit" />
+                        <label>Description</label>
+                        <textarea
+                            className="form-control"
+                            name="description"
+                            onChange={ this.handleChange }
+                            value={ this.state.description }
+                        />
+                    </div>
+                        <input className="btn btn-primary" type="submit" value="Submit" />
+                        <a className="btn btn-success"  href="/">Atras</a>
+                    </div>
                 </div>
             </form>
         )

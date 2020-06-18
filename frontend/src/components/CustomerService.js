@@ -10,6 +10,7 @@ export default class CustomerService {
 
     getCustomerByUrl = (link) => {
         const url = `${API_URL}${link}`;
+        return axios.get(url).then(response => response.data);
     }
 
     getCustomer = (pk) => {
